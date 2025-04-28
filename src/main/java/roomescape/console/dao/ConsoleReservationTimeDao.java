@@ -1,24 +1,30 @@
 package roomescape.console.dao;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.atomic.AtomicLong;
 import roomescape.time.dao.ReservationTimeDao;
 import roomescape.time.domain.ReservationTime;
 
 public class ConsoleReservationTimeDao implements ReservationTimeDao {
 
-    private static Long index = 1L;
-
+    private final AtomicLong index;
     private final List<ReservationTime> reservationTimes;
 
     public ConsoleReservationTimeDao() {
+        this.index = new AtomicLong(1L);
         this.reservationTimes = new ArrayList<>();
     }
 
     @Override
     public ReservationTime insert(ReservationTime requestReservationTime) {
-        ReservationTime reservationTime = new ReservationTime(index++, requestReservationTime);
+        if (isContain(requestReservationTime.getStartAt())) {
+            throw new IllegalArgumentException("[ERROR] 이미 존재하는 시간입니다.");
+        }
+
+        ReservationTime reservationTime = new ReservationTime(index.getAndIncrement(), requestReservationTime);
         reservationTimes.add(reservationTime);
         return reservationTime;
     }
@@ -30,15 +36,20 @@ public class ConsoleReservationTimeDao implements ReservationTimeDao {
 
     @Override
     public void delete(long id) {
-        if (reservationTimes.size() < id) {
-            throw new NoSuchElementException("데이터베이스에 해당 id가 존재하지 않습니다.");
-        }
         ReservationTime targetReservationTime = findById(id);
         reservationTimes.remove(targetReservationTime);
     }
 
     @Override
     public ReservationTime findById(long id) {
-        return reservationTimes.get((int)(id - 1));
+        return reservationTimes.stream()
+                .filter(reservationTime -> reservationTime.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 시간을 찾을 수 없습니다."));
+    }
+
+    public boolean isContain(LocalTime time) {
+        return reservationTimes.stream()
+                .anyMatch(reservationTime -> reservationTime.getStartAt().equals(time));
     }
 }
