@@ -15,12 +15,12 @@ import roomescape.reservation.domain.Reservation;
 import roomescape.time.domain.ReservationTime;
 
 @Repository
-public class ReservationDaoImpl implements ReservationDao {
+public class JdbcReservationDao implements ReservationDao {
 
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public ReservationDaoImpl(JdbcTemplate jdbcTemplate) {
+    public JdbcReservationDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

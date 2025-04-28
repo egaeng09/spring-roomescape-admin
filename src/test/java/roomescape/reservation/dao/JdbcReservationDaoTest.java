@@ -19,7 +19,7 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFOR
 
 @JdbcTest
 @DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
-class ReservationDaoImplTest {
+class JdbcReservationDaoTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -28,7 +28,7 @@ class ReservationDaoImplTest {
 
     @BeforeEach
     void setUp() {
-        reservationDao = new ReservationDaoImpl(jdbcTemplate);
+        reservationDao = new JdbcReservationDao(jdbcTemplate);
         Reservation requestReservation = new Reservation(
                 "시소",
                 LocalDate.of(2025, 1, 1),
