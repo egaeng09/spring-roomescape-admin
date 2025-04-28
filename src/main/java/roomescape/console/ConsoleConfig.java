@@ -11,7 +11,7 @@ import roomescape.time.dao.ReservationTimeDao;
 import roomescape.time.service.ReservationTimeService;
 import roomescape.time.service.utils.ReservationTimeMapper;
 
-public class AppConfig {
+public class ConsoleConfig {
 
     public ConsoleController consoleController() {
         ReservationDao reservationDao = new ConsoleReservationDao();

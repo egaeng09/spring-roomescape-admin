@@ -1,7 +1,6 @@
 package roomescape.console.controller;
 
 import java.util.List;
-import roomescape.console.ExceptionHandler;
 import roomescape.console.view.ConsoleView;
 import roomescape.console.view.Menu;
 import roomescape.reservation.dto.ReservationRequest;
